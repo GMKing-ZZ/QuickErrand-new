@@ -21,3 +21,14 @@ export function uploadBannerImage(file) {
     timeout: 60000
   })
 }
+
+export function uploadOrderTypeIcon(file) {
+  const formData = new FormData()
+  formData.append('file', file)
+  return request({
+    url: '/file/upload/order-type-icon',
+    method: 'post',
+    data: formData,
+    timeout: 60000
+  })
+}

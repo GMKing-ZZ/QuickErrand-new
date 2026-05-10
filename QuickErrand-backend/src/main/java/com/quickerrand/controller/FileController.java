@@ -47,6 +47,14 @@ public class FileController {
         return saveFile(file, relativePath);
     }
 
+    @ApiOperation("上传订单类型图标 - 统一存储在order-type-icons目录")
+    @PostMapping("/upload/order-type-icon")
+    public Result<String> uploadOrderTypeIcon(@RequestParam("file") MultipartFile file) {
+        String date = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+        String relativePath = "order-type-icons/" + date + "/" + generateFilename(file.getOriginalFilename());
+        return saveFile(file, relativePath);
+    }
+
     @ApiOperation("上传评论图片 - 按订单号分类存储")
     @PostMapping("/upload/review")
     public Result<String> uploadReview(

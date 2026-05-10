@@ -69,7 +69,7 @@
           @click="selectOrderType(item)"
         >
           <view class="service-icon-wrapper">
-            <image v-if="item.icon && item.icon.startsWith('/')" :src="item.icon" class="service-icon-image" mode="aspectFit" />
+            <image v-if="item.icon && (item.icon.startsWith('/') || item.icon.startsWith('http://') || item.icon.startsWith('https://'))" :src="item.icon" class="service-icon-image" mode="aspectFit" />
             <text v-else class="service-icon">{{ item.icon || '📦' }}</text>
           </view>
           <text class="service-name">{{ item.typeName }}</text>

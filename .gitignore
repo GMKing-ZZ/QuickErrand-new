@@ -73,3 +73,15 @@ QuickErrand-backend/target/
 *.log
 *.jar
 *.war
+
+# Visual Studio
+.vs/
+
+# PPT and workspace files
+*.pptx
+ppt-assets/
+ppt-previews/
+ppt-workspace/
+
+# Trae AI
+.trae/

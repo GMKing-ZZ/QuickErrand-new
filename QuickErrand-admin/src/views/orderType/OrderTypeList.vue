@@ -61,9 +61,15 @@
         <el-table-column type="selection" width="55" align="center" />
         <el-table-column type="index" label="序号" width="55" align="center" />
         <el-table-column prop="typeName" label="类型名称" sortable align="center" />
-        <el-table-column prop="typeIcon" label="类型图标" show-overflow-tooltip align="center">
+        <el-table-column prop="typeIcon" label="类型图标" align="center" width="100">
           <template #default="{ row }">
-            <span v-if="row.typeIcon">{{ row.typeIcon }}</span>
+            <el-image
+              v-if="row.typeIcon"
+              :src="row.typeIcon"
+              :preview-src-list="[row.typeIcon]"
+              style="width: 50px; height: 50px; object-fit: cover; border-radius: var(--qe-radius-md);"
+              fit="cover"
+            />
             <span v-else style="color: var(--qe-text-muted);">-</span>
           </template>
         </el-table-column>
@@ -152,7 +158,21 @@
           <el-input v-model="form.typeName" placeholder="请输入类型名称" />
         </el-form-item>
         <el-form-item label="类型图标" prop="typeIcon">
-          <el-input v-model="form.typeIcon" placeholder="请输入类型图标路径" />
+          <div class="icon-upload-wrapper">
+            <el-upload
+              class="icon-uploader"
+              :http-request="handleIconUpload"
+              :show-file-list="false"
+              :before-upload="beforeIconUpload"
+            >
+              <img v-if="form.typeIcon" :src="form.typeIcon" class="uploaded-icon" />
+              <el-icon v-else class="icon-uploader-icon"><Plus /></el-icon>
+            </el-upload>
+            <div v-if="form.typeIcon" class="icon-actions">
+              <el-button size="small" type="danger" @click="handleRemoveIcon">删除图标</el-button>
+            </div>
+            <div class="upload-tip">支持jpg、jpeg、png、gif格式，大小不超过10MB</div>
+          </div>
         </el-form-item>
         <el-form-item label="类型描述" prop="typeDesc">
           <el-input
@@ -196,6 +216,7 @@ import {
   updateOrderTypeStatus,
   batchDeleteOrderTypes
 } from '@/api/orderType'
+import { uploadOrderTypeIcon } from '@/api/file'
 import PageHeader from '@/components/PageHeader.vue'
 
 const loading = ref(false)
@@ -459,6 +480,41 @@ const handleBatchDelete = () => {
     }
   }).catch(() => {})
 }
+
+const handleIconUpload = async (options) => {
+  try {
+    const res = await uploadOrderTypeIcon(options.file)
+    if (res && res.data) {
+      form.typeIcon = res.data
+      ElMessage.success('图标上传成功')
+    } else {
+      ElMessage.error('上传响应数据格式错误')
+    }
+  } catch (error) {
+    console.error('图标上传失败:', error)
+    ElMessage.error('图标上传失败: ' + (error.message || '未知错误'))
+  }
+}
+
+const beforeIconUpload = (file) => {
+  const isImage = file.type === 'image/jpeg' || file.type === 'image/jpg' || 
+                  file.type === 'image/png' || file.type === 'image/gif'
+  const isLt10M = file.size / 1024 / 1024 < 10
+
+  if (!isImage) {
+    ElMessage.error('只能上传图片文件（jpg、jpeg、png、gif）')
+    return false
+  }
+  if (!isLt10M) {
+    ElMessage.error('图片大小不能超过10MB')
+    return false
+  }
+  return true
+}
+
+const handleRemoveIcon = () => {
+  form.typeIcon = ''
+}
 </script>
 
 <style scoped>
@@ -509,5 +565,57 @@ const handleBatchDelete = () => {
 .batch-delete-btn:hover {
   box-shadow: 0 6px 20px rgba(239, 68, 68, 0.35) !important;
   transform: translateY(-1px);
+}
+
+.icon-upload-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.icon-uploader {
+  width: 100px;
+  height: 100px;
+  border: 1px dashed var(--qe-border);
+  border-radius: var(--qe-radius-md);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: all var(--qe-transition-fast);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--qe-surface);
+}
+
+.icon-uploader:hover {
+  border-color: var(--qe-primary);
+}
+
+.icon-uploader-icon {
+  font-size: 28px;
+  color: var(--qe-text-muted);
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.uploaded-icon {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.icon-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.upload-tip {
+  font-size: 12px;
+  color: var(--qe-text-muted);
 }
 </style>
