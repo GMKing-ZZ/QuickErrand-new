@@ -8,7 +8,7 @@ CREATE TABLE IF NOT EXISTS `t_runner_blacklist` (
   `update_time` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   `deleted` TINYINT DEFAULT 0 COMMENT '逻辑删除标记（0-未删除，1-已删除）',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `uk_user_runner` (`user_id`, `runner_id`),
+  UNIQUE KEY `uk_user_runner` (`user_id`, `runner_id`, `deleted`),
   KEY `idx_user_id` (`user_id`),
   KEY `idx_runner_id` (`runner_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='跑腿员黑名单表';

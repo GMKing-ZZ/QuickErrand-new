@@ -11,7 +11,7 @@
  Target Server Version : 80044 (8.0.44)
  File Encoding         : 65001
 
- Date: 15/04/2026 11:46:12
+ Date: 12/05/2026 16:37:41
 */
 
 SET NAMES utf8mb4;
@@ -112,7 +112,7 @@ CREATE TABLE `t_chat_delete_record`  (
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_user_contact`(`user_id` ASC, `contact_id` ASC) USING BTREE,
   INDEX `idx_user_contact_order`(`user_id` ASC, `contact_id` ASC, `order_id` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of t_chat_delete_record
@@ -139,7 +139,7 @@ CREATE TABLE `t_chat_message`  (
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_order_id`(`order_id` ASC) USING BTREE,
   INDEX `idx_to_user_read`(`to_user_id` ASC, `read_status` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 118 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '聊天消息表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 124 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '聊天消息表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of t_chat_message
@@ -166,7 +166,13 @@ INSERT INTO `t_chat_message` VALUES (113, 27, 21, 15, '435345', 1, 1, 1772963905
 INSERT INTO `t_chat_message` VALUES (114, 27, 15, 21, '222222', 1, 1, 1772968404550, 1772968426003, '2026-03-08 19:13:25', '2026-03-08 19:13:46', 0);
 INSERT INTO `t_chat_message` VALUES (115, 30, 15, 21, '在不', 1, 1, 1775054234286, 1775054255517, '2026-04-01 22:37:14', '2026-04-01 22:37:35', 0);
 INSERT INTO `t_chat_message` VALUES (116, 30, 21, 15, '在的在的', 1, 1, 1775054268097, 1775469108629, '2026-04-01 22:37:48', '2026-04-06 17:51:48', 0);
-INSERT INTO `t_chat_message` VALUES (117, 30, 15, 21, 'http://localhost:8088/api/uploads/chat/30/78e187c482d44871b1320ed6f7ceb9d2.png', 2, 0, 1775469265987, NULL, '2026-04-06 17:54:26', '2026-04-06 17:54:26', 0);
+INSERT INTO `t_chat_message` VALUES (117, 30, 15, 21, 'http://localhost:8088/api/uploads/chat/30/78e187c482d44871b1320ed6f7ceb9d2.png', 2, 1, 1775469265987, 1778492531342, '2026-04-06 17:54:26', '2026-05-11 17:42:11', 0);
+INSERT INTO `t_chat_message` VALUES (118, 27, 15, 21, '111', 1, 1, 1778569668203, 1778569670255, '2026-05-12 15:07:48', '2026-05-12 15:07:50', 0);
+INSERT INTO `t_chat_message` VALUES (119, 34, 21, 15, 'http://localhost:8088/api/uploads/chat/34/99f97275f0414b2fbfac47a98aafcfa7.png', 2, 1, 1778574784789, 1778574823193, '2026-05-12 16:33:05', '2026-05-12 16:33:43', 0);
+INSERT INTO `t_chat_message` VALUES (120, 34, 21, 15, '取到了', 1, 1, 1778574801108, 1778574823193, '2026-05-12 16:33:21', '2026-05-12 16:33:43', 0);
+INSERT INTO `t_chat_message` VALUES (121, 34, 21, 15, '马上送到', 1, 1, 1778574814201, 1778574823193, '2026-05-12 16:33:34', '2026-05-12 16:33:43', 0);
+INSERT INTO `t_chat_message` VALUES (122, 34, 15, 21, '好的，辛苦了', 1, 1, 1778574831038, 1778574981675, '2026-05-12 16:33:51', '2026-05-12 16:36:21', 0);
+INSERT INTO `t_chat_message` VALUES (123, 34, 15, 21, 'http://localhost:8088/api/uploads/chat/34/87c275f5d47a4e6288e88774bc9ade33.png', 2, 1, 1778574971175, 1778574981675, '2026-05-12 16:36:11', '2026-05-12 16:36:21', 0);
 
 -- ----------------------------
 -- Table structure for t_chat_order_rel
@@ -185,7 +191,7 @@ CREATE TABLE `t_chat_order_rel`  (
   UNIQUE INDEX `uk_order_id`(`order_id` ASC) USING BTREE,
   INDEX `idx_user_id`(`user_id` ASC) USING BTREE,
   INDEX `idx_runner_id`(`runner_id` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 19 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '订单-聊天绑定表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 20 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '订单-聊天绑定表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of t_chat_order_rel
@@ -193,6 +199,7 @@ CREATE TABLE `t_chat_order_rel`  (
 INSERT INTO `t_chat_order_rel` VALUES (16, 26, 15, 21, '2026-03-04 17:48:45', '2026-03-04 17:48:45', 0, NULL);
 INSERT INTO `t_chat_order_rel` VALUES (17, 27, 15, 21, '2026-03-04 18:59:12', '2026-03-04 18:59:12', 0, NULL);
 INSERT INTO `t_chat_order_rel` VALUES (18, 30, 15, 21, '2026-04-01 22:37:10', '2026-04-01 22:37:10', 0, NULL);
+INSERT INTO `t_chat_order_rel` VALUES (19, 34, 15, 21, '2026-05-12 16:28:31', '2026-05-12 16:28:31', 0, NULL);
 
 -- ----------------------------
 -- Table structure for t_earnings_record
@@ -272,7 +279,7 @@ CREATE TABLE `t_message`  (
   INDEX `idx_user_id`(`user_id` ASC) USING BTREE,
   INDEX `idx_is_read`(`is_read` ASC) USING BTREE,
   INDEX `idx_create_time`(`create_time` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 64 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '消息通知表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 74 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '消息通知表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of t_message
@@ -314,6 +321,16 @@ INSERT INTO `t_message` VALUES (60, 21, '订单已完成', '您服务的订单 O
 INSERT INTO `t_message` VALUES (61, 15, '订单支付成功', '您的订单 ORD20260401230641422378 已支付成功，等待跑腿员接单', 1, 31, 0, '2026-04-01 23:06:46', '2026-04-01 23:06:46');
 INSERT INTO `t_message` VALUES (62, 15, '跑腿员已接单', '您的订单 ORD20260401230641422378 已被 李华 接单，请耐心等待', 1, 31, 0, '2026-04-01 23:36:47', '2026-04-01 23:36:47');
 INSERT INTO `t_message` VALUES (63, 21, '新消息', '您有一条来自 李超 的新消息，点击查看', 3, 30, 0, '2026-04-06 17:54:26', '2026-04-06 17:54:26');
+INSERT INTO `t_message` VALUES (64, 15, '订单支付成功', '您的订单 ORD20260512143846751244 已支付成功，等待跑腿员接单', 1, 32, 0, '2026-05-12 14:38:52', '2026-05-12 14:38:52');
+INSERT INTO `t_message` VALUES (65, 21, '新消息', '您有一条来自 李超 的新消息，点击查看', 3, 27, 0, '2026-05-12 15:07:48', '2026-05-12 15:07:48');
+INSERT INTO `t_message` VALUES (66, 15, '订单支付成功', '您的订单 ORD20260512160958208374 已支付成功，等待跑腿员接单', 1, 33, 0, '2026-05-12 16:10:05', '2026-05-12 16:10:05');
+INSERT INTO `t_message` VALUES (67, 15, '订单支付成功', '您的订单 ORD20260512162702752276 已支付成功，等待跑腿员接单', 1, 34, 0, '2026-05-12 16:27:05', '2026-05-12 16:27:05');
+INSERT INTO `t_message` VALUES (68, 15, '跑腿员已接单', '您的订单 ORD20260512162702752276 已被 泡泡 接单，请耐心等待', 1, 34, 0, '2026-05-12 16:28:22', '2026-05-12 16:28:22');
+INSERT INTO `t_message` VALUES (69, 15, '新消息', '您有一条来自 泡泡 的新消息，点击查看', 3, 34, 0, '2026-05-12 16:33:05', '2026-05-12 16:33:05');
+INSERT INTO `t_message` VALUES (70, 15, '新消息', '您有一条来自 泡泡 的新消息，点击查看', 3, 34, 0, '2026-05-12 16:33:21', '2026-05-12 16:33:21');
+INSERT INTO `t_message` VALUES (71, 15, '新消息', '您有一条来自 泡泡 的新消息，点击查看', 3, 34, 0, '2026-05-12 16:33:34', '2026-05-12 16:33:34');
+INSERT INTO `t_message` VALUES (72, 21, '新消息', '您有一条来自 李超 的新消息，点击查看', 3, 34, 0, '2026-05-12 16:33:51', '2026-05-12 16:33:51');
+INSERT INTO `t_message` VALUES (73, 21, '新消息', '您有一条来自 李超 的新消息，点击查看', 3, 34, 0, '2026-05-12 16:36:11', '2026-05-12 16:36:11');
 
 -- ----------------------------
 -- Table structure for t_order
@@ -360,7 +377,7 @@ CREATE TABLE `t_order`  (
   INDEX `idx_runner_id`(`runner_id` ASC) USING BTREE,
   INDEX `idx_status`(`status` ASC) USING BTREE,
   INDEX `idx_create_time`(`create_time` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 32 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '订单表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 35 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '订单表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of t_order
@@ -369,6 +386,9 @@ INSERT INTO `t_order` VALUES (26, 'ORD20260304174638836116', 15, 21, 1, '丽华'
 INSERT INTO `t_order` VALUES (27, 'ORD20260304185836912371', 15, 21, 3, '李华', '19287656783', '山东省临沂市兰陵县卞庄街道开元乐家购物广场兰陵文化公园', 118.069446, 34.855302, '山东省临沂市兰陵县代村幸福小区203', '李超', '19216278622', 118.036402, 34.839739, 3476, '书', '[\"http://localhost:8088/api/uploads/order-items/pending/20260304/b5b7e07929e846dbaebfbb64fb60128d.png\"]', NULL, 13.00, 1.30, 11.70, '没有', NULL, 4, 1, '2026-03-04 18:58:41', '2026-03-04 18:59:08', NULL, '2026-03-04 19:01:42', NULL, NULL, '2026-03-04 18:58:37', '2026-03-04 18:58:37');
 INSERT INTO `t_order` VALUES (30, 'ORD20260401223014525078', 15, 21, 1, '李华', '19876567237', '山东省临沂市兰陵县卞庄街道莲花山城莲花山城中区', 118.047608, 34.867675, '山东省临沂市兰陵县卞庄街道银座花园', '李超', '19216278622', 118.074696, 34.854979, 2846, '苹果', '[\"http://localhost:8088/api/uploads/order-items/pending/20260401/16ed98c319eb46db8f386c166375636b.jpg\"]', NULL, 15.00, 1.50, 13.50, '', '128530', 4, 1, '2026-04-01 22:30:59', '2026-04-01 22:34:56', NULL, '2026-04-01 22:42:21', NULL, NULL, '2026-04-01 22:30:14', '2026-04-01 22:30:14');
 INSERT INTO `t_order` VALUES (31, 'ORD20260401230641422378', 15, 61, 1, '张三', '19267536787', '山东省临沂市兰陵县卞庄街道开元乐家购物广场兰陵文化公园', 118.069446, 34.855302, '山东省临沂市兰陵县卞庄街道银座花园', '李超', '19216278622', 118.074696, 34.854979, 480, '蛋糕', '[\"http://localhost:8088/api/uploads/order-items/pending/20260401/13fe2276bb464d0d928cff32305a519e.jpg\"]', NULL, 11.50, 1.15, 10.35, '', '585264', 3, 1, '2026-04-01 23:06:46', '2026-04-01 23:36:47', NULL, NULL, NULL, NULL, '2026-04-01 23:06:42', '2026-04-01 23:06:42');
+INSERT INTO `t_order` VALUES (32, 'ORD20260512143846751244', 15, NULL, 4, '陈述', '13054965489', '山东省临沂市兰陵县卞庄街道塔山公园201A', 118.055448, 34.852246, '山东省临沂市兰陵县代村幸福小区203', '李超', '19216278622', 118.036402, 34.839739, 2225, '帮我把门口的快递送到代村小区', '[\"http://localhost:8088/api/uploads/order-items/pending/20260512/7e9da2a54c7240f9956392cb89392a9a.png\"]', NULL, 12.00, 1.20, 10.80, '', '876747', 2, 1, '2026-05-12 14:38:52', NULL, NULL, NULL, NULL, NULL, '2026-05-12 14:38:47', '2026-05-12 14:38:47');
+INSERT INTO `t_order` VALUES (33, 'ORD20260512160958208374', 15, NULL, 3, '张老板', '18275798547', '山东省临沂市兰陵县卞庄街道168酒食美味园兰陵国家农业公园', 118.047494, 34.829963, '山东省临沂市兰陵县代村幸福小区203', '李超', '19216278622', 118.036402, 34.839739, 1485, '帮我把饭店里做好的菜带过来', '[\"http://localhost:8088/api/uploads/order-items/pending/20260512/1cd7343a9a4b40198c01047d6f32d15f.png\"]', NULL, 10.00, 1.00, 9.00, '', '696057', 2, 1, '2026-05-12 16:10:05', NULL, NULL, NULL, NULL, NULL, '2026-05-12 16:09:58', '2026-05-12 16:09:58');
+INSERT INTO `t_order` VALUES (34, 'ORD20260512162702752276', 15, 21, 5, '李超', '19216278622', '山东省临沂市兰陵县卞庄街道兰陵县人民医院东医疗区', 118.108653, 34.857297, '山东省临沂市兰陵县代村幸福小区203', '李超', '19216278622', 118.036402, 34.839739, 6876, '帮我把ct取出来，送过来', '[\"http://localhost:8088/api/uploads/order-items/pending/20260512/20991971c8fe48dc857a3c08a50a20de.png\"]', NULL, 20.00, 2.00, 18.00, '', '188760', 3, 1, '2026-05-12 16:27:05', '2026-05-12 16:28:21', NULL, NULL, NULL, NULL, '2026-05-12 16:27:02', '2026-05-12 16:27:02');
 
 -- ----------------------------
 -- Table structure for t_order_type
@@ -391,11 +411,11 @@ CREATE TABLE `t_order_type`  (
 -- ----------------------------
 -- Records of t_order_type
 -- ----------------------------
-INSERT INTO `t_order_type` VALUES (1, '代买', '/static/icons/daimai.png', '帮您购买商品', 1, 1, '2026-01-25 17:27:14', '2026-02-01 11:39:49');
-INSERT INTO `t_order_type` VALUES (2, '代送', '/static/icons/daisong.png', '帮您配送物品', 2, 1, '2026-01-25 17:27:14', '2026-02-01 11:39:51');
-INSERT INTO `t_order_type` VALUES (3, '代取', '/static/icons/daiqu.png', '帮您取件取货', 3, 1, '2026-01-25 17:27:14', '2026-02-01 11:39:53');
-INSERT INTO `t_order_type` VALUES (4, '代办', '/static/icons/daiban.png', '帮您办理事务', 4, 1, '2026-01-25 17:27:14', '2026-01-25 17:27:14');
-INSERT INTO `t_order_type` VALUES (5, '代寄', '/static/icons/daiji.png', '帮您寄送快递', 5, 1, '2026-01-25 17:27:14', '2026-01-25 17:27:14');
+INSERT INTO `t_order_type` VALUES (1, '代买', 'http://localhost:8088/api/uploads/order-type-icons/20260511/d1e9886ddbba42bd8e80eb847cae6e60.png', '帮您购买商品', 1, 1, '2026-01-25 17:27:14', '2026-02-01 11:39:49');
+INSERT INTO `t_order_type` VALUES (2, '代送', 'http://localhost:8088/api/uploads/order-type-icons/20260511/b8aebf019d8945c9848d948a1de05c4a.png', '帮您配送物品', 2, 1, '2026-01-25 17:27:14', '2026-02-01 11:39:51');
+INSERT INTO `t_order_type` VALUES (3, '代取', 'http://localhost:8088/api/uploads/order-type-icons/20260511/c809d60eec63458faefd5c13738479fa.png', '帮您取件取货', 3, 1, '2026-01-25 17:27:14', '2026-02-01 11:39:53');
+INSERT INTO `t_order_type` VALUES (4, '代办', 'http://localhost:8088/api/uploads/order-type-icons/20260511/25945f04194c49bda3bcb577d87759c6.png', '帮您办理事务', 4, 1, '2026-01-25 17:27:14', '2026-01-25 17:27:14');
+INSERT INTO `t_order_type` VALUES (5, '代寄', 'http://localhost:8088/api/uploads/order-type-icons/20260511/b3c4d76f7a1b472ca091a1140317ee60.png', '帮您寄送快递', 5, 1, '2026-01-25 17:27:14', '2026-01-25 17:27:14');
 
 -- ----------------------------
 -- Table structure for t_runner_blacklist
@@ -410,15 +430,15 @@ CREATE TABLE `t_runner_blacklist`  (
   `update_time` datetime NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   `deleted` tinyint NULL DEFAULT 0 COMMENT '逻辑删除标记（0-未删除，1-已删除）',
   PRIMARY KEY (`id`) USING BTREE,
-  UNIQUE INDEX `uk_user_runner`(`user_id` ASC, `runner_id` ASC) USING BTREE,
+  UNIQUE INDEX `uk_user_runner`(`user_id` ASC, `runner_id` ASC, `deleted` ASC) USING BTREE,
   INDEX `idx_user_id`(`user_id` ASC) USING BTREE,
   INDEX `idx_runner_id`(`runner_id` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 10 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '跑腿员黑名单表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 17 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '跑腿员黑名单表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of t_runner_blacklist
 -- ----------------------------
-INSERT INTO `t_runner_blacklist` VALUES (1, 15, 21, NULL, '2026-03-08 17:02:07', '2026-04-06 19:04:26', 1);
+INSERT INTO `t_runner_blacklist` VALUES (1, 15, 21, NULL, '2026-03-08 17:02:07', '2026-05-12 15:44:34', 1);
 
 -- ----------------------------
 -- Table structure for t_runner_info
@@ -450,8 +470,8 @@ CREATE TABLE `t_runner_info`  (
 -- ----------------------------
 -- Records of t_runner_info
 -- ----------------------------
-INSERT INTO `t_runner_info` VALUES (5, 21, '泡泡', '371424199009106413', 'http://localhost:8088/api/uploads/runner-auth/paopao/d6a344ccd1e94a239bbbe214465707ea.png', 'http://localhost:8088/api/uploads/runner-auth/paopao/7a0ab7acc90944f4a6c40a800a0e5730.png', 2, NULL, '', 1, 1, 100.00, '08:00-22:00', 10000, '2026-03-04 19:31:30', '2026-03-03 13:48:55');
-INSERT INTO `t_runner_info` VALUES (10, 61, '李华', '371424198807066541', 'http://localhost:8088/api/uploads/runner-auth/user9747616404/df768bd740c5473fbac2e5f78e709fda.png', 'http://localhost:8088/api/uploads/runner-auth/user9747616404/e4e71162623b425ca70ac0449a7e2e5c.png', 2, NULL, '', 3, 0, 100.00, NULL, 5000, '2026-04-01 23:35:48', '2026-04-01 23:34:02');
+INSERT INTO `t_runner_info` VALUES (5, 21, '泡泡', '371424199009106413', 'http://localhost:8088/api/uploads/runner-auth/paopao/d6a344ccd1e94a239bbbe214465707ea.png', 'http://localhost:8088/api/uploads/runner-auth/paopao/7a0ab7acc90944f4a6c40a800a0e5730.png', 2, NULL, '', 1, 3, 100.00, '08:00-22:00', 10000, '2026-03-04 19:31:30', '2026-03-03 13:48:55');
+INSERT INTO `t_runner_info` VALUES (10, 61, '李华', '371424198807066541', 'http://localhost:8088/api/uploads/runner-auth/user9747616404/df768bd740c5473fbac2e5f78e709fda.png', 'http://localhost:8088/api/uploads/runner-auth/user9747616404/e4e71162623b425ca70ac0449a7e2e5c.png', 2, NULL, '', 1, 0, 0.00, '08:00-22:00', 5000, '2026-04-01 23:35:48', '2026-04-01 23:34:02');
 
 -- ----------------------------
 -- Table structure for t_user
@@ -488,7 +508,7 @@ INSERT INTO `t_user` VALUES (1, NULL, '13800000000', 'admin', '$2a$10$qNuRrSQ/Ld
 INSERT INTO `t_user` VALUES (15, NULL, '19216278622', 'mincer233', '$2a$10$wpbA3BSjYTfdu0n.7XnWROfOAMkS0St2.g992ISisWq4tm4DF01Ou', '李超', 'http://localhost:8088/api/uploads/avatars/user/a889ad6476704a459985fea9f5f2e874.jpg', 1, '2026-03-04', 1, 1, 151.12, '2026-02-28 14:32:00', '2026-02-28 14:32:00', 0, 0);
 INSERT INTO `t_user` VALUES (21, NULL, '18751189111', 'paopao', '$2a$10$fPxq3TkLH37l87Br0HShe.E19S4c6HoW8HnYrmDdzPOp3oYtzqVqG', '泡泡', 'http://localhost:8088/api/uploads/avatars/user/2dece4d455214e198418bef983f6cf47.png', 1, '2004-03-07', 2, 1, 0.00, '2026-03-03 13:47:41', '2026-03-03 13:47:41', 0, 1);
 INSERT INTO `t_user` VALUES (60, 'mock_openid_1775055150610', NULL, 'wx_55150610', '$2a$10$j4B9xylF/2nMJWNyuMjubu..ECSVX8N.dWCsQYxYLH.AwruLdFJCi', '微信用户1775055150613', NULL, 0, NULL, 1, 1, 0.00, '2026-04-01 22:52:31', '2026-04-01 22:52:31', 0, 1);
-INSERT INTO `t_user` VALUES (61, NULL, '15069974761', 'user9747616404', '$2a$10$X.GInkuSH6zQotGbn5cSLePgaCbbDrUh.uolXUggAVZ/DNO.GGjUO', '李华', NULL, 0, NULL, 2, 1, 0.00, '2026-04-01 22:59:20', '2026-04-01 22:59:20', 0, 1);
+INSERT INTO `t_user` VALUES (61, NULL, '15069974761', 'user9747616404', '$2a$10$X.GInkuSH6zQotGbn5cSLePgaCbbDrUh.uolXUggAVZ/DNO.GGjUO', '李华', 'http://localhost:8088/api/uploads/avatars/user9747616404/0d30e51f2c7e4104b1038955ff1642dd.png', 0, NULL, 2, 1, 0.00, '2026-04-01 22:59:20', '2026-04-01 22:59:20', 0, 1);
 
 -- ----------------------------
 -- Table structure for t_withdrawal_record
@@ -518,6 +538,6 @@ CREATE TABLE `t_withdrawal_record`  (
 -- Records of t_withdrawal_record
 -- ----------------------------
 INSERT INTO `t_withdrawal_record` VALUES (6, 21, 13.50, 0.14, 13.36, 2, 'mincer233', 4, '2026-03-04 18:02:47', '2026-03-04 18:02:52', NULL, '2026-03-04 18:02:39', '2026-03-04 18:02:39');
-INSERT INTO `t_withdrawal_record` VALUES (7, 21, 25.20, 0.25, 24.95, 2, 'mincer2333', 1, NULL, NULL, NULL, '2026-04-01 22:57:05', '2026-04-01 22:57:05');
+INSERT INTO `t_withdrawal_record` VALUES (7, 21, 25.20, 0.25, 24.95, 2, 'mincer2333', 4, '2026-05-11 17:50:45', '2026-05-11 17:50:47', NULL, '2026-04-01 22:57:05', '2026-04-01 22:57:05');
 
 SET FOREIGN_KEY_CHECKS = 1;

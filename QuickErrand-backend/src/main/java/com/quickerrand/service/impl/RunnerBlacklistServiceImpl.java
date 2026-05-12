@@ -54,13 +54,18 @@ public class RunnerBlacklistServiceImpl implements RunnerBlacklistService {
             throw new BusinessException("该跑腿员已在黑名单中");
         }
 
-        RunnerBlacklist blacklist = new RunnerBlacklist();
-        blacklist.setUserId(userId);
-        blacklist.setRunnerId(runnerId);
-        blacklist.setReason(reason);
-        runnerBlacklistMapper.insert(blacklist);
-
-        log.info("用户拉黑跑腿员成功，用户ID：{}，跑腿员ID：{}", userId, runnerId);
+        RunnerBlacklist deletedRecord = runnerBlacklistMapper.selectDeletedRecord(userId, runnerId);
+        if (deletedRecord != null) {
+            runnerBlacklistMapper.restoreRecord(deletedRecord.getId(), reason);
+            log.info("用户重新拉黑跑腿员成功（恢复记录），用户ID：{}，跑腿员ID：{}", userId, runnerId);
+        } else {
+            RunnerBlacklist blacklist = new RunnerBlacklist();
+            blacklist.setUserId(userId);
+            blacklist.setRunnerId(runnerId);
+            blacklist.setReason(reason);
+            runnerBlacklistMapper.insert(blacklist);
+            log.info("用户拉黑跑腿员成功，用户ID：{}，跑腿员ID：{}", userId, runnerId);
+        }
     }
 
     @Override
