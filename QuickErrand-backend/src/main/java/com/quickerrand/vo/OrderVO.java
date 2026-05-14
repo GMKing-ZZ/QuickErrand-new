@@ -55,6 +55,16 @@ public class OrderVO {
     private String pickupAddress;
 
     /**
+     * 取件经度
+     */
+    private BigDecimal pickupLongitude;
+
+    /**
+     * 取件纬度
+     */
+    private BigDecimal pickupLatitude;
+
+    /**
      * 收件联系人
      */
     private String deliveryContact;
@@ -68,6 +78,16 @@ public class OrderVO {
      * 收件详细地址
      */
     private String deliveryAddress;
+
+    /**
+     * 收件经度
+     */
+    private BigDecimal deliveryLongitude;
+
+    /**
+     * 收件纬度
+     */
+    private BigDecimal deliveryLatitude;
 
     /**
      * 距离（公里）

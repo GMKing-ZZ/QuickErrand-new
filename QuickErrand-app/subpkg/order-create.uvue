@@ -442,24 +442,19 @@ export default {
       uni.chooseLocation({
         success: (res) => {
           console.log('选择取件位置成功:', res)
-          // 保存经纬度
           this.pickupForm.latitude = res.latitude.toString()
           this.pickupForm.longitude = res.longitude.toString()
-          
-          // 始终使用高德地图逆地理编码解析地址，获取准确的省市区信息
-          this.reverseGeocodePickup(res.latitude, res.longitude)
-          
-          // 重新计算距离
+
+          if (res.address || res.name) {
+            this.parsePickupAddressFromChooseLocation(res)
+          } else {
+            this.reverseGeocodePickup(res.latitude, res.longitude)
+          }
+
           if (this.deliveryAddress && this.isPickupFormValid()) {
-            console.log('取件位置选择后，准备计算距离')
             setTimeout(() => {
               this.calculateDistance()
             }, 100)
-          } else {
-            console.log('取件位置选择后，但送达地址未选择或取件信息不完整', {
-              hasDeliveryAddress: !!this.deliveryAddress,
-              isPickupFormValid: this.isPickupFormValid()
-            })
           }
         },
         fail: (err) => {
@@ -473,6 +468,88 @@ export default {
           }
         }
       })
+    },
+
+    parsePickupAddressFromChooseLocation(locationRes: any) {
+      const address = locationRes.address || ''
+      const name = locationRes.name || ''
+
+      const key = MAP_CONFIG.amapKey
+      if (!key) {
+        this.fillPickupAddressFallback(address, name)
+        return
+      }
+
+      const location = `${locationRes.longitude},${locationRes.latitude}`
+      uni.showLoading({ title: '正在解析地址...', mask: true })
+
+      uni.request({
+        url: 'https://restapi.amap.com/v3/geocode/regeo',
+        method: 'GET',
+        data: {
+          location: location,
+          key: key,
+          radius: 1000,
+          extensions: 'base'
+        },
+        success: (res: any) => {
+          uni.hideLoading()
+          if (res.data && res.data.status === '1' && res.data.regeocode) {
+            const addressComponent = res.data.regeocode.addressComponent
+            if (addressComponent) {
+              const province = addressComponent.province || ''
+              let city = addressComponent.city || ''
+              const district = addressComponent.district || ''
+              const isMunicipality = province.includes('北京') || province.includes('天津') ||
+                                     province.includes('重庆') || province.includes('上海')
+              if (isMunicipality) {
+                this.pickupForm.province = province
+                this.pickupForm.city = province
+                this.pickupForm.district = district
+                this.pickupForm.region = [province, province, district]
+              } else {
+                this.pickupForm.province = province
+                this.pickupForm.city = city
+                this.pickupForm.district = district
+                this.pickupForm.region = [province, city, district]
+              }
+
+              let detailAddr = ''
+              if (address && name && address !== name) {
+                detailAddr = name + '(' + address + ')'
+              } else if (name) {
+                detailAddr = name
+              } else if (address) {
+                detailAddr = address
+              }
+
+              if (detailAddr) {
+                const prefix = this.pickupForm.province + this.pickupForm.city + this.pickupForm.district
+                if (detailAddr.startsWith(prefix)) {
+                  detailAddr = detailAddr.substring(prefix.length)
+                }
+              }
+
+              this.pickupForm.detailAddress = detailAddr || addressComponent.township + addressComponent.street + addressComponent.streetNumber
+
+              uni.showToast({ title: '地址解析成功', icon: 'success', duration: 1500 })
+            } else {
+              this.fillPickupAddressFallback(address, name)
+            }
+          } else {
+            this.fillPickupAddressFallback(address, name)
+          }
+        },
+        fail: () => {
+          uni.hideLoading()
+          this.fillPickupAddressFallback(address, name)
+        }
+      })
+    },
+
+    fillPickupAddressFallback(address: string, name: string) {
+      if (!address && !name) return
+      this.pickupForm.detailAddress = name ? (address && address !== name ? name + '(' + address + ')' : name) : address
     },
 
     // 逆地理编码：根据经纬度获取取件地址信息
@@ -816,7 +893,6 @@ export default {
     },
 
     calculateDistance() {
-      // 简单计算两点距离（实际应该使用地图API）
       const pickupAddr = this.getPickupAddress()
       if (!pickupAddr || !this.deliveryAddress) {
         console.log('calculateDistance: 取件地址或送达地址为空', {
@@ -826,7 +902,6 @@ export default {
         return
       }
 
-      // 获取经纬度并转换为数字
       const lat1Str = pickupAddr.latitude || ''
       const lon1Str = pickupAddr.longitude || ''
       const lat2Str = this.deliveryAddress.latitude || ''
@@ -837,30 +912,60 @@ export default {
       const lat2 = parseFloat(lat2Str)
       const lon2 = parseFloat(lon2Str)
 
-      console.log('calculateDistance: 经纬度信息', {
-        pickup: { lat: lat1Str, lon: lon1Str, latNum: lat1, lonNum: lon1 },
-        delivery: { lat: lat2Str, lon: lon2Str, latNum: lat2, lonNum: lon2 }
-      })
-
-      // 检查经纬度是否有效（不能是NaN、0或空）
       const isValidLat1 = !isNaN(lat1) && lat1 !== 0 && lat1Str.trim() !== ''
       const isValidLon1 = !isNaN(lon1) && lon1 !== 0 && lon1Str.trim() !== ''
       const isValidLat2 = !isNaN(lat2) && lat2 !== 0 && lat2Str.trim() !== ''
       const isValidLon2 = !isNaN(lon2) && lon2 !== 0 && lon2Str.trim() !== ''
 
       if (!isValidLat1 || !isValidLon1 || !isValidLat2 || !isValidLon2) {
-        console.warn('calculateDistance: 经纬度无效，使用默认距离', {
-          isValidPickup: isValidLat1 && isValidLon1,
-          isValidDelivery: isValidLat2 && isValidLon2
-        })
-        // 如果经纬度无效，使用默认距离
+        console.warn('calculateDistance: 经纬度无效，使用默认距离')
         this.distance = 5.0
         this.calculateFeeAmount()
         return
       }
 
-      // 使用Haversine公式计算距离
-      const R = 6371 // 地球半径（公里）
+      const key = MAP_CONFIG.amapKey
+      if (!key) {
+        this.distance = this.calculateStraightLineDistance(lat1, lon1, lat2, lon2)
+        this.calculateFeeAmount()
+        return
+      }
+
+      const origin = `${lon1},${lat1}`
+      const destination = `${lon2},${lat2}`
+      uni.request({
+        url: 'https://restapi.amap.com/v3/direction/driving',
+        method: 'GET',
+        data: {
+          origin: origin,
+          destination: destination,
+          key: key,
+          extensions: 'base'
+        },
+        success: (res: any) => {
+          if (res.data && res.data.status === '1' && res.data.route) {
+            const paths = res.data.route.paths
+            if (paths && paths.length > 0) {
+              const distMeters = parseFloat(paths[0].distance || '0')
+              if (distMeters > 0) {
+                this.distance = distMeters / 1000
+                this.calculateFeeAmount()
+                return
+              }
+            }
+          }
+          this.distance = this.calculateStraightLineDistance(lat1, lon1, lat2, lon2)
+          this.calculateFeeAmount()
+        },
+        fail: () => {
+          this.distance = this.calculateStraightLineDistance(lat1, lon1, lat2, lon2)
+          this.calculateFeeAmount()
+        }
+      })
+    },
+
+    calculateStraightLineDistance(lat1: number, lon1: number, lat2: number, lon2: number): number {
+      const R = 6371
       const dLat = this.toRad(lat2 - lat1)
       const dLon = this.toRad(lon2 - lon1)
       const a =
@@ -868,13 +973,7 @@ export default {
         Math.cos(this.toRad(lat1)) * Math.cos(this.toRad(lat2)) *
         Math.sin(dLon / 2) * Math.sin(dLon / 2)
       const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
-      this.distance = R * c
-
-      console.log('calculateDistance: 计算完成', {
-        distance: this.distance
-      })
-
-      this.calculateFeeAmount()
+      return R * c
     },
 
     toRad(value: number): number {

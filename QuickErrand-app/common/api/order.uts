@@ -31,9 +31,13 @@ export type OrderInfo = {
   pickupContact : string
   pickupPhone : string
   pickupAddress : string
+  pickupLongitude ?: string
+  pickupLatitude ?: string
   deliveryContact : string
   deliveryPhone : string
   deliveryAddress : string
+  deliveryLongitude ?: string
+  deliveryLatitude ?: string
   distance ?: number
   itemDescription ?: string
   itemImages ?: string
